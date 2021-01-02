@@ -2,6 +2,9 @@ from django.http import HttpResponse
 from db.settings import CONFIRMATION_TOKEN
 from rest_framework.decorators import api_view
 
+from api import *
+from vkbot.models import Users
+
 
 @api_view(['GET', 'POST'])
 def main(request):
@@ -9,6 +12,15 @@ def main(request):
         return HttpResponse({"message": "hello world!"})
     elif request.method == 'POST':
         data = request.data
-        print(data)
         if data["type"] == "confirmation":
             return HttpResponse(CONFIRMATION_TOKEN)
+        elif data["type"] == "message_new":
+            user_id = data["object"]["user_id"]
+            # obj return user_id, created bool status
+            select_method(data, user_id)
+            return HttpResponse("ok")
+        else:
+            return HttpResponse("ok")
+    else:
+        print("ploxo")
+        return HttpResponse({"error": "bad request"})
