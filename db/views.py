@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from db.settings import CONFIRMATION_TOKEN
 from rest_framework.decorators import api_view
 
-from api import *
+from .api import select_method
 from vkbot.models import Users
 
 
