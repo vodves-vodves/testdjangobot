@@ -1,6 +1,5 @@
 from django.http import HttpResponse
-
-
+from db.settings import CONFIRMATION_TOKEN
 
 
 def main(request):
@@ -9,4 +8,5 @@ def main(request):
     elif request.method == 'POST':
         data = request.data
         print(data)
-        return HttpResponse('8294de96')
+        if data["type"] == "confirmation":
+            return HttpResponse(CONFIRMATION_TOKEN)

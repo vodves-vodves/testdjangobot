@@ -122,6 +122,7 @@ STATICFILES_DIRS = (
 )
 
 TOKEN = os.environ.get("TOKEN")
+CONFIRMATION_TOKEN = os.environ.get("CONFIRMATION_TOKEN")
 admins = (154499340, 131849742)
 
 django_heroku.settings(locals())
