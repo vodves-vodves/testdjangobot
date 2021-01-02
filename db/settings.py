@@ -121,4 +121,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+TOKEN = os.environ.get("TOKEN")
+admins = (154499340, 131849742)
+
 django_heroku.settings(locals())
