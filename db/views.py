@@ -12,8 +12,8 @@ def main(request):
         return HttpResponse({'<h1>Привет</h1>'})
     elif request.method == 'POST':
         data = request.data
-        # if data["type"] == "confirmation":
-        #    return HttpResponse(CONFIRMATION_TOKEN)
+        if data["type"] == "confirmation":
+            return HttpResponse(CONFIRMATION_TOKEN)
         if data["type"] == "message_new":
             user_id = data["object"]["user_id"]
             # obj return user_id, created bool status

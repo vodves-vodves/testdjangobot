@@ -7,8 +7,7 @@ vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
 
 
-def select_method(data, db_user):
-    user_id = data["object"]["user_id"]
+def select_method(data, user_id):
     body = data["object"]["body"].lower()
     if body == "Отправить":
         send_message(user_id, "Привет")
