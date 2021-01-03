@@ -12,7 +12,9 @@ def select_method(data, user_id):
     if body == "отправить":
         send_message(user_id, "Привет")
     else:
-        send_message(user_id, "главное меню", keyboard=main_menu())
+        items = ("Отправить|g", "line", "Помощь|r", "Главное меню|b")
+        keyboard = generate_keyboard(items)
+        send_message(user_id, "главное меню", keyboard=keyboard)
 
 
 def main_menu():
