@@ -17,7 +17,8 @@ def user_info(user_id):
         if line_counter == 2:
             items.append("line")
             line_counter = 0
-        items.append(specializ)
+        items.append(specializ.name)
+        line_counter += 1
     items.append("line")
     items.append("главное меню|b")
     keyboard = generate_keyboard(items)
@@ -32,7 +33,7 @@ def get_spec(user_id, spec):
 def admin(user_id):
     items = (
         "Добавить специальность|g", "Удалить специальность|r", "line", "Добавить группу|g", "Удалить группу|r", "line",
-        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать Id")
+        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g")
     keyboard = generate_keyboard(items)
     message = "Меню управления ботом: "
     send_message(user_id, message, keyboard=keyboard)
@@ -65,7 +66,7 @@ def select_method(data, user_id):
     elif body == "выключить каждодневное напоминание":
         if user_id in admins:
             pass
-    elif body == "узнать Id":
+    elif body == "узнать ид":
         if user_id in admins:
             pass
     elif body == "выбрать специальность":
