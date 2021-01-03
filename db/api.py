@@ -9,7 +9,7 @@ vk = vk_session.get_api()
 
 def select_method(data, user_id):
     body = data["object"]["body"].lower()
-    if body == "Отправить":
+    if body == "отправить":
         send_message(user_id, "Привет")
 
     else:
