@@ -18,6 +18,8 @@ def user_info(user_id):
             items.append("line")
             line_counter = 0
         items.append(specializ)
+    items.append("line")
+    items.append("главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Пожалуйста, выберите вашу специальность: "
     send_message(user_id, message, keyboard=keyboard)
