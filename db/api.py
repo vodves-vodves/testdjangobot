@@ -3,7 +3,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 from db.settings import TOKEN
 from db.settings import admins
-from vkbot.models import Specialization, Group
+from vkbot.models import Specialization, Group, Users
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
@@ -27,7 +27,23 @@ def user_info(user_id):
 
 
 def get_spec(user_id, spec):
-    pass
+    user = Users.objects.get(vk_id=user_id)
+    speci = Specialization.objects.get(name=spec)
+    user.specialization = speci
+    line_counter = 0
+    items = []
+    groups = Group.objects.all()
+    for group in groups:
+        if line_counter == 2:
+            items.append("line")
+            line_counter = 0
+        items.append(group.name)
+        line_counter += 1
+    items.append("line")
+    items.append("главное меню|b")
+    keyboard = generate_keyboard(items)
+    message = "Пожалуйста, выберите номер группы: "
+    send_message(user_id, message, keyboard=keyboard)
 
 
 def admin(user_id):
