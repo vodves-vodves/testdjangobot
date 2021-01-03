@@ -30,6 +30,7 @@ def get_spec(user_id, spec):
     user = Users.objects.get(vk_id=user_id)
     speci = Specialization.objects.get(name=spec)
     user.specialization = speci
+    user.save()
     line_counter = 0
     items = []
     groups = Group.objects.all()
