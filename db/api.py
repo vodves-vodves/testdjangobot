@@ -11,7 +11,6 @@ def select_method(data, user_id):
     body = data["object"]["body"].lower()
     if body == "отправить":
         send_message(user_id, "Привет")
-
     else:
         send_message(user_id, "главное меню", keyboard=main_menu())
 

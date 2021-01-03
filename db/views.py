@@ -12,6 +12,7 @@ def main(request):
         return HttpResponse({'<h1>Привет</h1>'})
     elif request.method == 'POST':
         data = request.data
+        print(data)
         if data["type"] == "confirmation":
             return HttpResponse(CONFIRMATION_TOKEN)
         elif data["type"] == "message_new":
