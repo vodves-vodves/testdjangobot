@@ -3,18 +3,75 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 from db.settings import TOKEN
 from db.settings import admins
+from vkbot.models import Specialization, Group
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
 
 
+def user_info(user_id):
+    line_counter = 0
+    items = []
+    specialnost = Specialization.objects.all()
+    for specializ in specialnost:
+        if line_counter == 2:
+            items.append("line")
+            line_counter = 0
+        items.append(specializ)
+    keyboard = generate_keyboard(items)
+    message = "Пожалуйста, выберите вашу специальность: "
+    send_message(user_id, message, keyboard=keyboard)
+
+
+def get_spec(user_id, spec):
+    pass
+
+
 def admin(user_id):
     items = (
         "Добавить специальность|g", "Удалить специальность|r", "line", "Добавить группу|g", "Удалить группу|r", "line",
-        "Включить каждодневное напоминание|g", "Выключить каждодневное напоминание|r")
+        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать Id")
     keyboard = generate_keyboard(items)
     message = "Меню управления ботом: "
     send_message(user_id, message, keyboard=keyboard)
+
+
+def select_method(data, user_id):
+    spec = data["object"]["message"]["text"]
+    group = data["object"]["message"]["text"]
+    body = data["object"]["message"]["text"].lower()
+    if body == "отправить":
+        user_info(user_id)
+    elif body == "админ":
+        if user_id in admins:
+            admin(user_id)
+    elif body == "добавить специальность":
+        if user_id in admins:
+            pass
+    elif body == "удалить специальность":
+        if user_id in admins:
+            pass
+    elif body == "добавить группу":
+        if user_id in admins:
+            pass
+    elif body == "удалить группу":
+        if user_id in admins:
+            pass
+    elif body == "включить каждодневное напоминание":
+        if user_id in admins:
+            pass
+    elif body == "выключить каждодневное напоминание":
+        if user_id in admins:
+            pass
+    elif body == "узнать Id":
+        if user_id in admins:
+            pass
+    elif body == "выбрать специальность":
+        pass
+    elif body == "выбрать номер группы":
+        pass
+    else:
+        send_message(user_id, "Главное меню", keyboard=main_menu())
 
 
 def main_menu():
@@ -55,14 +112,3 @@ def generate_keyboard(items):
 
             keyboard.add_button(current_title, color=current_color)
     return keyboard.get_keyboard()
-
-
-def select_method(data, user_id):
-    body = data["object"]["message"]["text"].lower()
-    if body == "отправить":
-        send_message(user_id, "Привет")
-    elif body == "админ":
-        if user_id in admins:
-            admin(user_id)
-    else:
-        send_message(user_id, "Главное меню", keyboard=main_menu())
