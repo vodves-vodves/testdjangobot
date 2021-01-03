@@ -12,9 +12,9 @@ def main(request):
         return HttpResponse({"message": "hello world!"})
     elif request.method == 'POST':
         data = request.data
-        if data["type"] == "confirmation":
-            return HttpResponse(CONFIRMATION_TOKEN)
-        elif data["type"] == "message_new":
+        #if data["type"] == "confirmation":
+        #    return HttpResponse(CONFIRMATION_TOKEN)
+        if data["type"] == "message_new":
             user_id = data["object"]["user_id"]
             # obj return user_id, created bool status
             select_method(data, user_id)
