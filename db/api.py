@@ -90,7 +90,7 @@ def select_method(data, user_id):
     elif body == "выбрать номер группы":
         pass
     elif spec in [i.name for i in Specialization.objects.all()]:
-        pass
+        get_spec(user_id, spec)
     else:
         send_message(user_id, "Главное меню", keyboard=main_menu())
 
