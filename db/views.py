@@ -16,7 +16,7 @@ def main(request):
         if data["type"] == "confirmation":
             return HttpResponse(CONFIRMATION_TOKEN)
         elif data["type"] == "message_new":
-            user_id = data["object"]["from_id"]
+            user_id = data["object"]["message"]["from_id"]
             # obj return user_id, created bool status
             select_method(data, user_id)
             return HttpResponse("ok")
