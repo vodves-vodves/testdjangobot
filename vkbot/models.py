@@ -2,14 +2,6 @@ from django.db import models
 
 
 # Create your models here.
-class Users(models.Model):
-    vk_id = models.CharField(max_length=255, verbose_name='Вк_Id', unique=True)
-    name = models.CharField(max_length=255, verbose_name='Фамилия Имя')
-
-    def __str__(self):
-        return self.name
-
-
 class Specialization(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование специальности')
 
@@ -20,6 +12,15 @@ class Specialization(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=255, verbose_name='Номер группы', unique=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Users(models.Model):
+    vk_id = models.CharField(max_length=255, verbose_name='Вк_Id', unique=True)
+    name = models.CharField(max_length=255, verbose_name='Фамилия Имя')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="группа", null=True)
 
     def __str__(self):
         return self.name
