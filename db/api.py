@@ -47,6 +47,18 @@ def get_spec(user_id, spec):
     send_message(user_id, message, keyboard=keyboard)
 
 
+def get_group(user_id, group):
+    user = Users.objects.get(vk_id=user_id)
+    groupi = Group.objects.get(name=group)
+    user.group = groupi
+    user.save()
+
+    items = ("главное меню|b",)
+    keyboard = generate_keyboard(items)
+    message = "Пожалуйста, введите данные: "
+    send_message(user_id, message, keyboard=keyboard)
+
+
 def admin(user_id):
     items = (
         "Добавить специальность|g", "Удалить специальность|r", "line", "Добавить группу|g", "Удалить группу|r", "line",
@@ -92,6 +104,8 @@ def select_method(data, user_id):
         pass
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
+    elif group in [i.name for i in Group.objects.all()]:
+        get_group(user_id, group)
     else:
         send_message(user_id, "Главное меню", keyboard=main_menu())
 
