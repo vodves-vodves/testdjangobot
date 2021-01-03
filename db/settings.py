@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vkbot',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

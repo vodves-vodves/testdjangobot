@@ -9,10 +9,10 @@ from vkbot.models import Users
 @api_view(['GET', 'POST'])
 def main(request):
     if request.method == "GET":
-        return HttpResponse({"message": "hello world!"})
+        return HttpResponse({'<h1>Привет</h1>'})
     elif request.method == 'POST':
         data = request.data
-        #if data["type"] == "confirmation":
+        # if data["type"] == "confirmation":
         #    return HttpResponse(CONFIRMATION_TOKEN)
         if data["type"] == "message_new":
             user_id = data["object"]["user_id"]
