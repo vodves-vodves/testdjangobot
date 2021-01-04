@@ -33,12 +33,13 @@ def get_spec(user_id, spec):
     user.save()
     line_counter = 0
     items = []
-    groups = Group.objects.filter(specialnost__startswith=speci).values()
+    groups = Group.objects.all()
     for group in groups:
         if line_counter == 2:
             items.append("line")
             line_counter = 0
-        items.append(group.get('name'))
+        if group.get('specialnost') == spec:
+            items.append(group.get('name'))
         line_counter += 1
     items.append("line")
     items.append("Главное меню|b")
