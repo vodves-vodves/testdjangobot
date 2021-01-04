@@ -9,44 +9,6 @@ vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
 
 
-def test():
-    items = ("ПД-418",
-             "ПД-419",
-             "ПД-420",
-             "ПСК-425",
-             "ПКС-407",
-             "Ф-423",
-             "ПД-321",
-             "ПД-322",
-             "ПД-323",
-             "ПСК-326",
-             "ПСК-327",
-             "ПКС-308",
-             "Ф-324",
-             "ПД-225",
-             "ПД-226",
-             "ПД-227",
-             "ПД-228",
-             "ПСК-228",
-             "ПСК-229",
-             "ПКС-209",
-             "Ф-225",
-             "ПД-129",
-             "ПД-130",
-             "ПД-131",
-             "ПД-132",
-             "ПСК-130",
-             "ПСК-131",
-             "Д-101",
-             "ПИ-112",
-             "ПКС-110",
-             "Ф-126",)
-    for item in items:
-        name = item.split('-')
-        spec_item = Specialization.objects.get(name=name[0])
-        group = Group.objects.get_or_create(name=name[1], specialnost=spec_item)
-
-
 def user_info(user_id):
     line_counter = 0
     items = []
@@ -109,20 +71,28 @@ def get_id(message):  # Узнать ид
     return text[0].get('id')
 
 
-def add_spec(spec, user_id):
-    pass
-
-
-def del_spec(spec, user_id):
-    pass
-
-
 def add_group(group, user_id):
-    pass
+    name = group.split("ga")
+    try:
+        name_spec = name[1].split("-")
+        spec = Specialization.objects.get(name=name_spec[0])
+        group = Group.objects.get_or_create(name=name_spec[1], specialnost=spec)
+        send_message(user_id, "Группа добавлена!", keyboard=main_menu())
+    except Exception as e:
+        for admin in admins:
+            send_message(admin, f"Не удалось добавить группу: {e}", keyboard=main_menu())
 
 
 def del_group(group, user_id):
-    pass
+    name = group.split("gd")
+    try:
+        name_spec = name[1].split("-")
+        group = Group.objects.get(name=name_spec[1])
+        group.delete()
+        send_message(user_id, "Группа успешно удалена!", keyboard=main_menu())
+    except Exception as e:
+        for admin in admins:
+            send_message(admin, f"Не удалось удалить группу: {e}")
 
 
 def del_starosta(vk_id, user_id):
@@ -133,7 +103,7 @@ def del_starosta(vk_id, user_id):
         send_message(user_id, "Староста успешно удален!", keyboard=main_menu())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось удалить старосту: {e}")
+            send_message(admin, f"Не удалось удалить старосту: {e}", keyboard=main_menu())
 
 
 def add_starosta(vk_id, user_id):
@@ -144,13 +114,13 @@ def add_starosta(vk_id, user_id):
         send_message(user_id, "Староста успешно добавлен!", keyboard=main_menu())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось добавить старосту: {e}")
+            send_message(admin, f"Не удалось добавить старосту: {e}", keyboard=main_menu())
 
 
 def admin(user_id):
     items = (
-        "Добавить старосту|g", "Удалить старосту|r", "line", "Добавить специальность|g", "Удалить специальность|r",
-        "line", "Добавить группу|g", "Удалить группу|r", "line",
+        "Добавить старосту|g", "Удалить старосту|r", "line",
+        "Добавить группу|g", "Удалить группу|r", "line",
         "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g",
         "line", "Главное меню|b")
     keyboard = generate_keyboard(items)
@@ -162,54 +132,56 @@ def select_method(data, user_id):
     spec = data["object"]["message"]["text"]
     group = data["object"]["message"]["text"]
     body = data["object"]["message"]["text"].lower()
-    if body == "отправить":
-        user_info(user_id)
-        test()
-    elif body == "админ":
-        if user_id in admins:
-            admin(user_id)
-    elif body == "добавить старосту":
-        if user_id in admins:
-            send_message(user_id, "Введите его id (Например, add12345678)")
-    elif body.startswith('add'):
-        if user_id in admins:
-            add_starosta(body, user_id)
-    elif body == "удалить старосту":
-        if user_id in admins:
-            send_message(user_id, "Введите его id (Например, del12345678)")
-    elif body.startswith('del'):
-        if user_id in admins:
-            del_starosta(body, user_id)
-    elif body == "добавить специальность":
-        if user_id in admins:
-            pass
-    elif body == "удалить специальность":
-        if user_id in admins:
-            pass
-    elif body == "добавить группу":
-        if user_id in admins:
-            pass
-    elif body == "удалить группу":
-        if user_id in admins:
-            pass
-    elif body == "включить каждодневное напоминание":
-        if user_id in admins:
-            pass
-    elif body == "выключить каждодневное напоминание":
-        if user_id in admins:
-            pass
-    elif body == "узнать ид":
-        if user_id in admins:
-            send_message(user_id, 'Введите ссылку на профиль:')
-    elif body.startswith('https://vk.com/'):
-        if user_id in admins:
-            send_message(user_id, f"Его id: {get_id(body)}")
-    elif spec in [i.name for i in Specialization.objects.all()]:
-        get_spec(user_id, spec)
-    elif group in [i.name for i in Group.objects.all()]:
-        get_group(user_id, group)
+    if user_id in [i.vk_id for i in Users.objects.all()]:
+        if body == "отправить":
+            user_info(user_id)
+        elif body == "админ":
+            if user_id in admins:
+                admin(user_id)
+        elif body == "добавить старосту":
+            if user_id in admins:
+                send_message(user_id, "Введите id (Например, add12345678)")
+        elif body.startswith('add'):
+            if user_id in admins:
+                add_starosta(body, user_id)
+        elif body == "удалить старосту":
+            if user_id in admins:
+                send_message(user_id, "Введите id (Например, del12345678)")
+        elif body.startswith('del'):
+            if user_id in admins:
+                del_starosta(body, user_id)
+        elif body == "добавить специальность":
+            if user_id in admins:
+                send_message(user_id, "Введите название (Например, gaПКС-407)")
+        elif body.startswith('ga'):
+            if user_id in admins:
+                add_group(body, user_id)
+        elif body == "удалить специальность":
+            if user_id in admins:
+                send_message(user_id, "Введите название (Например, gdПКС-407)")
+        elif body.startswith('gd'):
+            if user_id in admins:
+                del_group(body, user_id)
+        elif body == "включить каждодневное напоминание":
+            if user_id in admins:
+                pass
+        elif body == "выключить каждодневное напоминание":
+            if user_id in admins:
+                pass
+        elif body == "узнать ид":
+            if user_id in admins:
+                send_message(user_id, 'Введите ссылку на профиль:')
+        elif body.startswith('https://vk.com/'):
+            if user_id in admins:
+                send_message(user_id, f"Его id: {get_id(body)}")
+        elif spec in [i.name for i in Specialization.objects.all()]:
+            get_spec(user_id, spec)
+        elif group in [i.name for i in Group.objects.all()]:
+            get_group(user_id, group)
+        else:
+            send_message(user_id, "Главное меню", keyboard=main_menu())
     else:
-        send_message(user_id, "Главное меню", keyboard=main_menu())
+        send_message(user_id, "Вы не являетесь старостой. Для регистрации напишите https://vk.com/id131849742")
 
 
 def main_menu():
