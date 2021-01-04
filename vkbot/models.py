@@ -23,4 +23,4 @@ class Users(models.Model):
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="специальность", null=True)
 
     def __str__(self):
-        return self.name
+        return self.vk_id
