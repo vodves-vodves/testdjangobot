@@ -34,13 +34,11 @@ def get_spec(user_id, spec):
     line_counter = 0
     items = []
     groups = Group.objects.all()
-    print(groups)
     for group in groups:
-        print(group)
-        if line_counter == 2:
-            items.append("line")
-            line_counter = 0
         if group.specialnost == speci:
+            if line_counter == 2:
+                items.append("line")
+                line_counter = 0
             items.append(group.name)
         line_counter += 1
     items.append("line")
