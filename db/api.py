@@ -67,13 +67,13 @@ def get_id(message):
     })
     return text[0].get('id')
 
+
 def admin(user_id):
     items = (
         "Добавить старосту|g", "Удалить старосту|r", "line", "Добавить специальность|g", "Удалить специальность|r",
         "line", "Добавить группу|g", "Удалить группу|r", "line",
-        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g")
-    items.append("line")
-    items.append("Главное меню|b")
+        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g",
+        "line", "Главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Меню управления ботом: "
     send_message(user_id, message, keyboard=keyboard)
@@ -110,7 +110,7 @@ def select_method(data, user_id):
     elif body == "узнать ид":
         if user_id in admins:
             if body.startswith('https://vk.com/'):
-                send_message(user_id,get_id(body))
+                send_message(user_id, get_id(body))
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:
