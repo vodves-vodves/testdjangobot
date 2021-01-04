@@ -12,15 +12,15 @@ vk = vk_session.get_api()
 def user_info(user_id):
     line_counter = 0
     items = []
-    specialnost = Specialization.objects.all()
+    specialnost = Specialization.objects.all()  # Получаем список специальностей из БД
     for specializ in specialnost:
-        if line_counter == 2:
+        if line_counter == 2:  # Для разделения кнопок - line
             items.append("line")
             line_counter = 0
-        items.append(specializ.name)
+        items.append(specializ.name)  # Добавляем специальность в лист
         line_counter += 1
     items.append("line")
-    items.append("главное меню|b")
+    items.append("Главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Пожалуйста, выберите вашу специальность: "
     send_message(user_id, message, keyboard=keyboard)
@@ -41,7 +41,7 @@ def get_spec(user_id, spec):
         items.append(group.name)
         line_counter += 1
     items.append("line")
-    items.append("главное меню|b")
+    items.append("Главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Пожалуйста, выберите номер группы: "
     send_message(user_id, message, keyboard=keyboard)
@@ -59,16 +59,28 @@ def get_group(user_id, group):
     send_message(user_id, message, keyboard=keyboard)
 
 
+def get_id(message):
+    user_id = message.split('https://vk.com/')
+    text = vk_session.method('users.get', {
+        'user_ids': user_id[1],
+        'name_case': 'Nom',
+    })
+    return text[0].get('id')
+
 def admin(user_id):
     items = (
-        "Добавить специальность|g", "Удалить специальность|r", "line", "Добавить группу|g", "Удалить группу|r", "line",
+        "Добавить старосту|g", "Удалить старосту|r", "line", "Добавить специальность|g", "Удалить специальность|r",
+        "line", "Добавить группу|g", "Удалить группу|r", "line",
         "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g")
+    items.append("line")
+    items.append("Главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Меню управления ботом: "
     send_message(user_id, message, keyboard=keyboard)
 
 
 def select_method(data, user_id):
+    id = data["object"]["message"]["text"]
     spec = data["object"]["message"]["text"]
     group = data["object"]["message"]["text"]
     body = data["object"]["message"]["text"].lower()
@@ -97,11 +109,8 @@ def select_method(data, user_id):
             pass
     elif body == "узнать ид":
         if user_id in admins:
-            pass
-    elif body == "выбрать специальность":
-        pass
-    elif body == "выбрать номер группы":
-        pass
+            if body.startswith('https://vk.com/'):
+                send_message(user_id,get_id(body))
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:
