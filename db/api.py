@@ -40,7 +40,7 @@ def get_spec(user_id, spec):
         if line_counter == 2:
             items.append("line")
             line_counter = 0
-        if group.specialnost == spec:
+        if group.specialnost == speci:
             items.append(group.name)
         line_counter += 1
     items.append("line")
