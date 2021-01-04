@@ -68,11 +68,23 @@ def get_id(message):
     return text[0].get('id')
 
 
-def add_starosta(id):
+def del_starosta(id, user_id):
     try:
-        id_starosta = id.split('id')
+        id_starosta = id.split('del')
+        starosta = Users.objects.get(vk_id=id_starosta[1])
+        starosta.delete()
+        send_message(user_id, "Староста успешно удален!")
+    except Exception as e:
+        for admin in admins:
+            send_message(admin, f"Не удалось удалить старосту: {e}")
+
+
+def add_starosta(id, user_id):
+    try:
+        id_starosta = id.split('add')
         starosta = Users.objects.create(vk_id=id_starosta[1])
         starosta.save()
+        send_message(user_id, "Староста успешно добавлен!")
     except Exception as e:
         for admin in admins:
             send_message(admin, f"Не удалось добавить старосту: {e}")
@@ -100,13 +112,16 @@ def select_method(data, user_id):
             admin(user_id)
     elif body == "добавить старосту":
         if user_id in admins:
-            send_message(user_id, "Введите его id (Например, id12345678)")
-    elif body.startswith('id'):
+            send_message(user_id, "Введите его id (Например, add12345678)")
+    elif body.startswith('add'):
         if user_id in admins:
-            add_starosta(body)
+            add_starosta(body, user_id)
     elif body == "удалить старосту":
         if user_id in admins:
-            pass
+            send_message(user_id, "Введите его id (Например, del12345678)")
+    elif body.startswith('del'):
+        if user_id in admins:
+            del_starosta(body, user_id)
     elif body == "добавить специальность":
         if user_id in admins:
             pass
