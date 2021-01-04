@@ -9,6 +9,44 @@ vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
 
 
+def test():
+    items = ('ПД-418',
+             'ПД-419',
+             'ПД-420',
+             'ПСК-425',
+             'ПКС-407',
+             'Ф-423',
+             'ПД-321',
+             'ПД-322',
+             'ПД-323',
+             'ПСК-326',
+             'ПСК-327',
+             'ПКС-308',
+             'Ф-324',
+             'ПД-225',
+             'ПД-226',
+             'ПД-227',
+             'ПД-228',
+             'ПСК-228',
+             'ПСК-229',
+             'ПКС-209',
+             'Ф-225',
+             'ПД-129',
+             'ПД-130',
+             'ПД-131',
+             'ПД-132',
+             'ПСК-130',
+             'ПСК-131',
+             'Д-101',
+             'ПИ-112',
+             'ПКС-110',
+             'Ф-126',)
+    for item in items:
+        name = item.split('-')
+        group = Group.objects.create(name=name[1], specialnost=name[0])
+        group.save()
+
+
 def user_info(user_id):
     line_counter = 0
     items = []
@@ -126,6 +164,7 @@ def select_method(data, user_id):
     body = data["object"]["message"]["text"].lower()
     if body == "отправить":
         user_info(user_id)
+        test()
     elif body == "админ":
         if user_id in admins:
             admin(user_id)
