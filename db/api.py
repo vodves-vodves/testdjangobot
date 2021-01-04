@@ -68,6 +68,16 @@ def get_id(message):
     return text[0].get('id')
 
 
+def add_starosta(id):
+    try:
+        id_starosta = id.split('id')
+        starosta = Users.objects.create(vk_id=id_starosta[1])
+        starosta.save()
+    except Exception as e:
+        for admin in admins:
+            send_message(admin, f"Не удалось добавить старосту: {e}")
+
+
 def admin(user_id):
     items = (
         "Добавить старосту|g", "Удалить старосту|r", "line", "Добавить специальность|g", "Удалить специальность|r",
@@ -88,6 +98,15 @@ def select_method(data, user_id):
     elif body == "админ":
         if user_id in admins:
             admin(user_id)
+    elif body == "добавить старосту":
+        if user_id in admins:
+            send_message(user_id, "Введите его id (Например, id12345678)")
+    elif body.startswith('id'):
+        if user_id in admins:
+            add_starosta(body)
+    elif body == "удалить старосту":
+        if user_id in admins:
+            pass
     elif body == "добавить специальность":
         if user_id in admins:
             pass
@@ -108,10 +127,10 @@ def select_method(data, user_id):
             pass
     elif body == "узнать ид":
         if user_id in admins:
-            send_message(user_id, 'Введите ссылку на профиль')
+            send_message(user_id, 'Введите ссылку на профиль:')
     elif body.startswith('https://vk.com/'):
         if user_id in admins:
-            send_message(user_id, get_id(body))
+            send_message(user_id, f"Его id: {get_id(body)}")
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:
