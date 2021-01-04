@@ -38,8 +38,8 @@ def get_spec(user_id, spec):
         if line_counter == 2:
             items.append("line")
             line_counter = 0
-        if group.get('specialnost') == spec:
-            items.append(group.get('name'))
+        if group.specialnost == spec:
+            items.append(group.name)
         line_counter += 1
     items.append("line")
     items.append("Главное меню|b")
