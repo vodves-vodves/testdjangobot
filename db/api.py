@@ -80,7 +80,6 @@ def admin(user_id):
 
 
 def select_method(data, user_id):
-    id = data["object"]["message"]["text"]
     spec = data["object"]["message"]["text"]
     group = data["object"]["message"]["text"]
     body = data["object"]["message"]["text"].lower()
@@ -109,8 +108,10 @@ def select_method(data, user_id):
             pass
     elif body == "узнать ид":
         if user_id in admins:
-            if body.startswith('https://vk.com/'):
-                send_message(user_id, get_id(body))
+            send_message(user_id, 'Введите ссылку на профиль')
+    elif body.startwith('https://vk.com/'):
+        if user_id in admins:
+            send_message(user_id, get_id(body))
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:
