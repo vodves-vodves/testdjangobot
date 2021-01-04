@@ -45,7 +45,6 @@ def test():
         name = item.split('-')
         spec_item = Specialization.objects.get(name=name[0])
         group = Group.objects.get_or_create(name=name[1], specialnost=spec_item)
-        group.save()
 
 
 def user_info(user_id):
