@@ -109,7 +109,7 @@ def select_method(data, user_id):
     elif body == "узнать ид":
         if user_id in admins:
             send_message(user_id, 'Введите ссылку на профиль')
-    elif body.startwith('https://vk.com/'):
+    elif body.startswith('https://vk.com/'):
         if user_id in admins:
             send_message(user_id, get_id(body))
     elif spec in [i.name for i in Specialization.objects.all()]:
