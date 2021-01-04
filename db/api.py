@@ -35,7 +35,7 @@ def get_spec(user_id, spec):
     items = []
     groups = Group.objects.all()
     print(groups)
-    for group in groups[0]:
+    for group in groups:
         print(group)
         if line_counter == 2:
             items.append("line")
