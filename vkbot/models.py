@@ -11,6 +11,7 @@ class Specialization(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=255, verbose_name='Номер группы', unique=True)
+    specialnost = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="специальность", null=True)
 
     def __str__(self):
         return self.name

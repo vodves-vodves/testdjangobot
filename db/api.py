@@ -33,12 +33,12 @@ def get_spec(user_id, spec):
     user.save()
     line_counter = 0
     items = []
-    groups = Group.objects.all()
+    groups = Group.objects.filter(specialnost__startswith=speci).values()
     for group in groups:
         if line_counter == 2:
             items.append("line")
             line_counter = 0
-        items.append(group.name)
+        items.append(group.get('name'))
         line_counter += 1
     items.append("line")
     items.append("Главное меню|b")
@@ -47,7 +47,7 @@ def get_spec(user_id, spec):
     send_message(user_id, message, keyboard=keyboard)
 
 
-def get_group(user_id, group):
+def get_group(user_id, group, spec):
     user = Users.objects.get(vk_id=user_id)
     groupi = Group.objects.get(name=group)
     user.group = groupi
@@ -59,7 +59,7 @@ def get_group(user_id, group):
     send_message(user_id, message, keyboard=keyboard)
 
 
-def get_id(message):
+def get_id(message):  # Узнать ид
     user_id = message.split('https://vk.com/')
     text = vk_session.method('users.get', {
         'user_ids': user_id[1],
@@ -68,23 +68,39 @@ def get_id(message):
     return text[0].get('id')
 
 
-def del_starosta(id, user_id):
+def add_spec(spec, user_id):
+    pass
+
+
+def del_spec(spec, user_id):
+    pass
+
+
+def add_group(group, user_id):
+    pass
+
+
+def del_group(group, user_id):
+    pass
+
+
+def del_starosta(vk_id, user_id):
     try:
-        id_starosta = id.split('del')
+        id_starosta = vk_id.split('del')
         starosta = Users.objects.get(vk_id=id_starosta[1])
         starosta.delete()
-        send_message(user_id, "Староста успешно удален!")
+        send_message(user_id, "Староста успешно удален!", keyboard=main_menu())
     except Exception as e:
         for admin in admins:
             send_message(admin, f"Не удалось удалить старосту: {e}")
 
 
-def add_starosta(id, user_id):
+def add_starosta(vk_id, user_id):
     try:
-        id_starosta = id.split('add')
+        id_starosta = vk_id.split('add')  # Здесь мы получаем запись типа add3453453
         starosta = Users.objects.create(vk_id=id_starosta[1])
         starosta.save()
-        send_message(user_id, "Староста успешно добавлен!")
+        send_message(user_id, "Староста успешно добавлен!", keyboard=main_menu())
     except Exception as e:
         for admin in admins:
             send_message(admin, f"Не удалось добавить старосту: {e}")
