@@ -132,56 +132,53 @@ def select_method(data, user_id):
     spec = data["object"]["message"]["text"]
     group = data["object"]["message"]["text"]
     body = data["object"]["message"]["text"].lower()
-    if user_id in [i.vk_id for i in Users.objects.all()]:
-        if body == "отправить":
-            user_info(user_id)
-        elif body == "админ":
-            if user_id in admins:
-                admin(user_id)
-        elif body == "добавить старосту":
-            if user_id in admins:
-                send_message(user_id, "Введите id (Например, add12345678)")
-        elif body.startswith('add'):
-            if user_id in admins:
-                add_starosta(body, user_id)
-        elif body == "удалить старосту":
-            if user_id in admins:
-                send_message(user_id, "Введите id (Например, del12345678)")
-        elif body.startswith('del'):
-            if user_id in admins:
-                del_starosta(body, user_id)
-        elif body == "добавить специальность":
-            if user_id in admins:
-                send_message(user_id, "Введите название (Например, gaПКС-407)")
-        elif body.startswith('ga'):
-            if user_id in admins:
-                add_group(body, user_id)
-        elif body == "удалить специальность":
-            if user_id in admins:
-                send_message(user_id, "Введите название (Например, gdПКС-407)")
-        elif body.startswith('gd'):
-            if user_id in admins:
-                del_group(body, user_id)
-        elif body == "включить каждодневное напоминание":
-            if user_id in admins:
-                pass
-        elif body == "выключить каждодневное напоминание":
-            if user_id in admins:
-                pass
-        elif body == "узнать ид":
-            if user_id in admins:
-                send_message(user_id, 'Введите ссылку на профиль:')
-        elif body.startswith('https://vk.com/'):
-            if user_id in admins:
-                send_message(user_id, f"Его id: {get_id(body)}")
-        elif spec in [i.name for i in Specialization.objects.all()]:
-            get_spec(user_id, spec)
-        elif group in [i.name for i in Group.objects.all()]:
-            get_group(user_id, group)
-        else:
-            send_message(user_id, "Главное меню", keyboard=main_menu())
+    if body == "отправить":
+        user_info(user_id)
+    elif body == "админ":
+        if user_id in admins:
+            admin(user_id)
+    elif body == "добавить старосту":
+        if user_id in admins:
+            send_message(user_id, "Введите id (Например, add12345678)")
+    elif body.startswith('add'):
+        if user_id in admins:
+            add_starosta(body, user_id)
+    elif body == "удалить старосту":
+        if user_id in admins:
+            send_message(user_id, "Введите id (Например, del12345678)")
+    elif body.startswith('del'):
+        if user_id in admins:
+            del_starosta(body, user_id)
+    elif body == "добавить специальность":
+        if user_id in admins:
+            send_message(user_id, "Введите название (Например, gaПКС-407)")
+    elif body.startswith('ga'):
+        if user_id in admins:
+            add_group(body, user_id)
+    elif body == "удалить специальность":
+        if user_id in admins:
+            send_message(user_id, "Введите название (Например, gdПКС-407)")
+    elif body.startswith('gd'):
+        if user_id in admins:
+            del_group(body, user_id)
+    elif body == "включить каждодневное напоминание":
+        if user_id in admins:
+            pass
+    elif body == "выключить каждодневное напоминание":
+        if user_id in admins:
+            pass
+    elif body == "узнать ид":
+        if user_id in admins:
+            send_message(user_id, 'Введите ссылку на профиль:')
+    elif body.startswith('https://vk.com/'):
+        if user_id in admins:
+            send_message(user_id, f"Его id: {get_id(body)}")
+    elif spec in [i.name for i in Specialization.objects.all()]:
+        get_spec(user_id, spec)
+    elif group in [i.name for i in Group.objects.all()]:
+        get_group(user_id, group)
     else:
-        send_message(user_id, "Вы не являетесь старостой. Для регистрации напишите https://vk.com/id131849742")
+        send_message(user_id, "Главное меню", keyboard=main_menu())
 
 
 def main_menu():
