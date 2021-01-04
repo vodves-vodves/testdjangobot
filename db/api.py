@@ -43,7 +43,8 @@ def test():
              "Ф-126",)
     for item in items:
         name = item.split('-')
-        group = Group.objects.get_or_create(name=name[1], specialnost=name[0])
+        spec_item = Specialization.objects.get(name=name[0])
+        group = Group.objects.get_or_create(name=name[1], specialnost=spec_item)
         group.save()
 
 
