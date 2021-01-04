@@ -73,6 +73,7 @@ def add_group(group, user_id):
     name = group.split("ga")
     try:
         name_spec = name[1].split("-")
+        speci = Specialization.objects.get_or_create(name=name_spec[0])
         spec = Specialization.objects.get(name=name_spec[0])
         group = Group.objects.get_or_create(name=name_spec[1], specialnost=spec)
         send_message(user_id, "Группа добавлена!", keyboard=main_menu())
