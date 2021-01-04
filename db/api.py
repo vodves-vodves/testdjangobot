@@ -147,13 +147,13 @@ def select_method(data, user_id):
     elif body.startswith('del'):
         if user_id in admins:
             del_starosta(body, user_id)
-    elif body == "добавить специальность":
+    elif body == "добавить группу":
         if user_id in admins:
             send_message(user_id, "Введите название (Например, gaПКС-407)")
     elif body.startswith('ga'):
         if user_id in admins:
             add_group(body, user_id)
-    elif body == "удалить специальность":
+    elif body == "удалить группу":
         if user_id in admins:
             send_message(user_id, "Введите название (Например, gdПКС-407)")
     elif body.startswith('gd'):
