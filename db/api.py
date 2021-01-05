@@ -202,7 +202,7 @@ def select_method(data, user_id):
             send_message(user_id, 'Введите ссылку на профиль:')
     elif body.startswith('https://vk.com/'):
         if user_id in admins:
-            send_message(user_id, f"Id: {get_id(body)}")
+            send_message(user_id, f"Id: {get_id(body)}", keyboard=main_menu_admin())
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:
