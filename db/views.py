@@ -20,7 +20,7 @@ def main(request):
             id = [i.vk_id for i in Users.objects.all()]
             send_message(user_id, id)
             send_message(user_id, user_id)
-            if user_id in [i.vk_id for i in Users.objects.all()]:
+            if str(user_id) in [i.vk_id for i in Users.objects.all()]:
                 select_method(data, user_id)
             else:
                 send_message(user_id, "Вы не зареганы")
