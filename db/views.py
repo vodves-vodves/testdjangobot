@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from db.settings import CONFIRMATION_TOKEN
 from rest_framework.decorators import api_view
 
-from .api import select_method
+from .api import select_method, send_message
 from vkbot.models import Users
 
 
@@ -17,8 +17,10 @@ def main(request):
             return HttpResponse(CONFIRMATION_TOKEN)
         elif data["type"] == "message_new":
             user_id = data["object"]["message"]["from_id"]
-            # obj return user_id, created bool status
-            select_method(data, user_id)
+            if user_id in [i.vk_id for i in Users.objects.all()]:
+                select_method(data, user_id)
+            else:
+                send_message(user_id, "Вы не зареганы")
             return HttpResponse("ok")
         else:
             return HttpResponse("ok")
