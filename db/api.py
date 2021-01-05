@@ -76,10 +76,10 @@ def add_group(group, user_id):
         speci = Specialization.objects.get_or_create(name=name_spec[0])
         spec = Specialization.objects.get(name=name_spec[0])
         group = Group.objects.get_or_create(name=name_spec[1], specialnost=spec)
-        send_message(user_id, "Группа добавлена!", keyboard=main_menu())
+        send_message(user_id, "Группа добавлена!", keyboard=main_menu_admin())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось добавить группу: {e}", keyboard=main_menu())
+            send_message(admin, f"Не удалось добавить группу: {e}", keyboard=main_menu_admin())
 
 
 def del_group(group, user_id):
@@ -88,10 +88,10 @@ def del_group(group, user_id):
         name_spec = name[1].split("-")
         group = Group.objects.get(name=name_spec[1])
         group.delete()
-        send_message(user_id, "Группа успешно удалена!", keyboard=main_menu())
+        send_message(user_id, "Группа успешно удалена!", keyboard=main_menu_admin())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось удалить группу: {e}")
+            send_message(admin, f"Не удалось удалить группу: {e}", keyboard=main_menu_admin())
 
 
 def del_starosta(vk_id, user_id):
@@ -99,10 +99,10 @@ def del_starosta(vk_id, user_id):
         id_starosta = vk_id.split('del')
         starosta = Users.objects.get(vk_id=id_starosta[1])
         starosta.delete()
-        send_message(user_id, "Староста успешно удален!", keyboard=main_menu())
+        send_message(user_id, "Староста успешно удален!", keyboard=main_menu_admin())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось удалить старосту: {e}", keyboard=main_menu())
+            send_message(admin, f"Не удалось удалить старосту: {e}", keyboard=main_menu_admin())
 
 
 def add_starosta(vk_id, user_id):
@@ -110,17 +110,28 @@ def add_starosta(vk_id, user_id):
         id_starosta = vk_id.split('add')  # Здесь мы получаем запись типа add3453453
         starosta = Users.objects.create(vk_id=id_starosta[1])
         starosta.save()
-        send_message(user_id, "Староста успешно добавлен!", keyboard=main_menu())
+        send_message(user_id, "Староста успешно добавлен!", keyboard=main_menu_admin())
     except Exception as e:
         for admin in admins:
-            send_message(admin, f"Не удалось добавить старосту: {e}", keyboard=main_menu())
+            send_message(admin, f"Не удалось добавить старосту: {e}", keyboard=main_menu_admin())
+
+
+def mailing():
+    ids = [i.vk_id for i in Users.objects.all()]
+    for i in ids:
+        try:
+            send_message(i, "Не забудьте отправить данные об отсутствющих студентов", keyboard=main_menu())
+        except:
+            continue
+    for i in admins:
+        send_message(i, "Рассылка завершена", main_menu_admin())
 
 
 def admin(user_id):
     items = (
         "Добавить старосту|g", "Удалить старосту|r", "line",
         "Добавить группу|g", "Удалить группу|r", "line",
-        "Включить каждодневное напоминание|g", "line", "Выключить каждодневное напоминание|r", "line", "Узнать ид|g",
+        "Узнать ид|g",
         "line", "Главное меню|b")
     keyboard = generate_keyboard(items)
     message = "Меню управления ботом: "
@@ -160,12 +171,9 @@ def select_method(data, user_id):
     elif body.startswith('gd'):
         if user_id in admins:
             del_group(body, user_id)
-    elif body == "включить каждодневное напоминание":
+    elif body == "начать рассылку":
         if user_id in admins:
-            pass
-    elif body == "выключить каждодневное напоминание":
-        if user_id in admins:
-            pass
+            mailing()
     elif body == "узнать ид":
         if user_id in admins:
             send_message(user_id, 'Введите ссылку на профиль:')
@@ -177,11 +185,20 @@ def select_method(data, user_id):
     elif group in [i.name for i in Group.objects.all()]:
         get_group(user_id, group)
     else:
-        send_message(user_id, "Главное меню", keyboard=main_menu())
+        if user_id in admins:
+            send_message(user_id, "Главное меню", keyboard=main_menu_admin())
+        else:
+            send_message(user_id, "Главное меню", keyboard=main_menu())
 
 
 def main_menu():
-    items = ("Отправить|g", "line", "Помощь|r", "Главное меню|b")
+    items = ("Отправить|g", "line", "Главное меню|b")
+    keyboard = generate_keyboard(items)
+    return keyboard
+
+
+def main_menu_admin():
+    items = ("Начать рассылку|g", "line", "Админ|r", "line", "Главное меню|b")
     keyboard = generate_keyboard(items)
     return keyboard
 

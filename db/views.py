@@ -17,9 +17,6 @@ def main(request):
             return HttpResponse(CONFIRMATION_TOKEN)
         elif data["type"] == "message_new":
             user_id = data["object"]["message"]["from_id"]
-            id = [i.vk_id for i in Users.objects.all()]
-            send_message(user_id, id)
-            send_message(user_id, user_id)
             if str(user_id) in [i.vk_id for i in Users.objects.all()]:
                 select_method(data, user_id)
             else:
