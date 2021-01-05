@@ -48,7 +48,7 @@ def get_spec(user_id, spec):
     send_message(user_id, message, keyboard=keyboard)
 
 
-def get_group(user_id, group, spec):
+def get_group(user_id, group):
     user = Users.objects.get(vk_id=user_id)
     groupi = Group.objects.get(name=group)
     user.group = groupi
