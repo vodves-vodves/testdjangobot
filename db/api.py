@@ -124,7 +124,7 @@ def mailing():
         except:
             continue
     for i in admins:
-        send_message(i, "Рассылка завершена", main_menu_admin())
+        send_message(i, "Рассылка завершена", keyboard=main_menu_admin())
 
 
 def admin(user_id):
