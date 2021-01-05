@@ -65,7 +65,7 @@ def get_group(user_id, group):
 def send_info(user_id, message):
     info = message.split("!")[1]
     user = Users.objects.get(vk_id=user_id)
-    group = str(user.specialization) + str(user.group)
+    group = str(user.specialization) + '-' + str(user.group)
     message_send = f"Имя и фамилия: {str(user.name)}\n"
     message_send += f"Группа: {str(group)}\n"
     message_send += f"Сообщение: {info}\n"
