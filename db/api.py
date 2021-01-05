@@ -56,8 +56,22 @@ def get_group(user_id, group):
 
     items = ("главное меню|b",)
     keyboard = generate_keyboard(items)
-    message = "Пожалуйста, введите данные: "
+    message = "Введите данные, которые вы хотите отправить. "
+    message += "Например, !10 отсутствуют, 5 болеют, 5 по своим причинам."
+    message += "Восклицательный знак '!' перед вашим сообщение ОБЯЗАТЕЛЬНО."
     send_message(user_id, message, keyboard=keyboard)
+
+
+def send_info(user_id, message):
+    info = message.split("!")[1]
+    user = Users.objects.get(vk_id=user_id)
+    group = user.specialization + user.group
+    message_send = f"Имя и фамилия: {str(user.name)}"
+    message_send += f"Группа: {str(group)}"
+    message_send += f"Сообщение: {info}"
+    for admin in admins:
+        send_message(admin, message_send, keyboard=main_menu_admin())
+    send_message(user_id, "Информация успешно отправлена!", keyboard=main_menu())
 
 
 def get_id(message):  # Узнать ид
@@ -108,7 +122,14 @@ def del_starosta(vk_id, user_id):
 def add_starosta(vk_id, user_id):
     try:
         id_starosta = vk_id.split('add')  # Здесь мы получаем запись типа add3453453
-        starosta = Users.objects.create(vk_id=id_starosta[1])
+        text = vk_session.method('users.get', {
+            'user_ids': id_starosta,
+            'name_case': 'Nom',
+        })
+        firstname = text[0].get('first_name')
+        lastname = text[0].get('last_name')
+        name = firstname + ' ' + lastname
+        starosta = Users.objects.create(vk_id=id_starosta[1], name=name)
         starosta.save()
         send_message(user_id, "Староста успешно добавлен!", keyboard=main_menu_admin())
     except Exception as e:
@@ -147,6 +168,8 @@ def select_method(data, user_id):
     elif body == "админ":
         if user_id in admins:
             admin(user_id)
+    elif body.startswith('!'):
+        pass
     elif body == "добавить старосту":
         if user_id in admins:
             send_message(user_id, "Введите id (Например, add12345678)")
