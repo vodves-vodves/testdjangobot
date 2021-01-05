@@ -56,9 +56,9 @@ def get_group(user_id, group):
 
     items = ("главное меню|b",)
     keyboard = generate_keyboard(items)
-    message = "Введите данные, которые вы хотите отправить. "
-    message += "Например, !10 отсутствуют, 5 болеют, 5 по своим причинам."
-    message += "Восклицательный знак '!' перед вашим сообщение ОБЯЗАТЕЛЬНО."
+    message = "Введите данные, которые вы хотите отправить. \n"
+    message += "Например, !10 отсутствуют, 5 болеют, 5 по своим причинам.\n"
+    message += "Восклицательный знак '!' перед вашим сообщение ОБЯЗАТЕЛЬНО.\n"
     send_message(user_id, message, keyboard=keyboard)
 
 
@@ -66,9 +66,9 @@ def send_info(user_id, message):
     info = message.split("!")[1]
     user = Users.objects.get(vk_id=user_id)
     group = str(user.specialization) + str(user.group)
-    message_send = f"Имя и фамилия: {str(user.name)}"
-    message_send += f"Группа: {str(group)}"
-    message_send += f"Сообщение: {info}"
+    message_send = f"Имя и фамилия: {str(user.name)}\n"
+    message_send += f"Группа: {str(group)}\n"
+    message_send += f"Сообщение: {info}\n"
     for admin in admins:
         send_message(admin, message_send, keyboard=main_menu_admin())
     send_message(user_id, "Информация успешно отправлена!", keyboard=main_menu())
