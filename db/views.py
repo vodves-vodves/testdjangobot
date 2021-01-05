@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from db.settings import CONFIRMATION_TOKEN
 from rest_framework.decorators import api_view
 
+from .settings import admins
 from .api import select_method, send_message
 from vkbot.models import Users
 
@@ -18,6 +19,8 @@ def main(request):
         elif data["type"] == "message_new":
             user_id = data["object"]["message"]["from_id"]
             if str(user_id) in [i.vk_id for i in Users.objects.all()]:
+                select_method(data, user_id)
+            elif str(user_id) in admins:
                 select_method(data, user_id)
             else:
                 send_message(user_id, "Вы не зареганы")
