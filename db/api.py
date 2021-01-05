@@ -40,7 +40,7 @@ def get_spec(user_id, spec):
                 items.append("line")
                 line_counter = 0
             items.append(group.name)
-        line_counter += 1
+            line_counter += 1
     items.append("line")
     items.append("Главное меню|b")
     keyboard = generate_keyboard(items)
