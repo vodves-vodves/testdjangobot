@@ -169,7 +169,7 @@ def select_method(data, user_id):
         if user_id in admins:
             admin(user_id)
     elif body.startswith('!'):
-        pass
+        send_info(user_id,body)
     elif body == "добавить старосту":
         if user_id in admins:
             send_message(user_id, "Введите id (Например, add12345678)")
