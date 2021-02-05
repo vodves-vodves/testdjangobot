@@ -1,4 +1,5 @@
 import vk_api
+import datetime
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 from db.settings import TOKEN
@@ -69,6 +70,12 @@ def send_info(user_id, message):
     message_send = f"Имя и фамилия: {str(user.name)}\n"
     message_send += f"Группа: {str(group)}\n"
     message_send += f"Сообщение: {info}\n"
+
+    now_day = datetime.date.today().day
+    user.send_date = str(now_day)
+    user.send_message = message_send
+    user.save()
+
     for admin in admins:
         send_message(admin, message_send, keyboard=main_menu_admin())
     send_message(user_id, "Информация успешно отправлена!", keyboard=main_menu())
@@ -202,7 +209,7 @@ def select_method(data, user_id):
             send_message(user_id, 'Введите ссылку на профиль:')
     elif body.startswith('https://vk.com/'):
         if user_id in admins:
-            send_message(user_id, f"Id: {get_id(body)}", keyboard=main_menu_admin())
+            send_message(user_id, get_id(body), keyboard=main_menu_admin())
     elif spec in [i.name for i in Specialization.objects.all()]:
         get_spec(user_id, spec)
     elif group in [i.name for i in Group.objects.all()]:

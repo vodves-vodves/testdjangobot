@@ -22,6 +22,8 @@ class Users(models.Model):
     name = models.CharField(max_length=255, verbose_name='Фамилия Имя', null=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="группа", null=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="специальность", null=True)
+    send_message = models.TextField(verbose_name='Отправленное сообщение', null=True)
+    send_date = models.CharField(verbose_name='Дата отправки', null=True, max_length=255)
 
     def __str__(self):
-        return self.vk_id
+        return self.name
