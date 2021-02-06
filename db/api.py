@@ -152,7 +152,7 @@ def mailing():
         except:
             continue
     for i in admins:
-        send_message(i, "Рассылка завершена", keyboard=main_menu_admin())
+        send_message(i, "Напоминание студентам успешно отправлено!", keyboard=main_menu_admin())
 
 
 def check_send_message():  # проверяем отправил ли староста сообщение
