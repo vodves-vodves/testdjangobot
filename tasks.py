@@ -8,7 +8,7 @@ from db.api import send_checked_message_admin
 sched = BlockingScheduler(timezone='Asia/Yekaterinburg')
 
 
-@sched.scheduled_job('cron', day_of_week='mon-sun', hour=1, minute=5)
+@sched.scheduled_job('cron', day_of_week='mon-sun', hour=1, minute=15)
 def timed_job():
     send_checked_message_admin()
 
