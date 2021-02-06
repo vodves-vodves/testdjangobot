@@ -26,4 +26,8 @@ class Users(models.Model):
     send_date = models.CharField(verbose_name='Дата отправки', null=True, max_length=255)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
+
+
+class BlackList(models.Model):
+    vk_id = models.CharField(max_length=255, verbose_name='Вк_Id', unique=True)

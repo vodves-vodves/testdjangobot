@@ -4,7 +4,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 from db.settings import TOKEN
 from db.settings import admins
-from vkbot.models import Specialization, Group, Users
+from vkbot.models import Specialization, Group, Users, BlackList
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
@@ -155,6 +155,35 @@ def mailing():
         send_message(i, "Рассылка завершена", keyboard=main_menu_admin())
 
 
+def check_send_message():  # проверяем отправил ли староста сообщение
+    users = [user for user in Users.objects.all()]
+    for user in users:
+        try:
+            now_day = datetime.date.today().day
+            if user.send_date != str(now_day):
+                blacklist = BlackList.objects.create(vk_id=user.vk_id)
+                blacklist.save()
+        except:
+            continue
+
+
+def send_checked_message_admin():
+    check_send_message()
+    blacklist_users = [user for user in BlackList.objects.all()]
+    if blacklist_users:  # не пустой
+        message = "Сегодня не отправили сообщения:\n"
+        for blacklist_user in blacklist_users:
+            try:
+                message += f"{blacklist_user.name}\n"
+            except:
+                continue
+        for i in admins:
+            send_message(i, message, keyboard=main_menu_admin())
+    else:
+        for i in admins:
+            send_message(i, "Сегодня все отправили сообщения!", keyboard=main_menu_admin())
+
+
 def admin(user_id):
     items = (
         "Добавить старосту|g", "Удалить старосту|r", "line",
@@ -176,7 +205,7 @@ def select_method(data, user_id):
         if user_id in admins:
             admin(user_id)
     elif body.startswith('!'):
-        send_info(user_id,body)
+        send_info(user_id, body)
     elif body == "добавить старосту":
         if user_id in admins:
             send_message(user_id, "Введите id (Например, add12345678)")
