@@ -174,7 +174,8 @@ def send_checked_message_admin():
         message = "Сегодня не отправили сообщения:\n"
         for blacklist_user in blacklist_users:
             try:
-                message += f"{blacklist_user.name}\n"
+                user = Users.objects.get(vk_id=blacklist_user.vk_id)
+                message += f"{user.name}\n"
             except:
                 continue
         for i in admins:

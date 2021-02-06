@@ -31,3 +31,6 @@ class Users(models.Model):
 
 class BlackList(models.Model):
     vk_id = models.CharField(max_length=255, verbose_name='Вк_Id', unique=True)
+
+    def __str__(self):
+        return str(self.vk_id)
