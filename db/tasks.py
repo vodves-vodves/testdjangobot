@@ -1,7 +1,5 @@
-import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'db.settings')
 from apscheduler.schedulers.blocking import BlockingScheduler
-from db.api import send_checked_message_admin
+from .api import send_checked_message_admin
 
 
 scheduler = BlockingScheduler(timezone='Asia/Yekaterinburg')

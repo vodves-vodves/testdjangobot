@@ -1,2 +1,2 @@
 web: gunicorn db.wsgi
-cock: python tasks.py
+cock: python db/tasks.py
