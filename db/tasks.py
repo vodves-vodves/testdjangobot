@@ -1,5 +1,5 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from .api import send_checked_message_admin
+from db.api import send_checked_message_admin
 
 
 scheduler = BlockingScheduler(timezone='Asia/Yekaterinburg')
