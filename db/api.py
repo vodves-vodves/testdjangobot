@@ -175,11 +175,12 @@ def send_checked_message_admin():
         for blacklist_user in blacklist_users:
             try:
                 user = Users.objects.get(vk_id=blacklist_user.vk_id)
-                message += f"{user.name}\n"
+                message += f"{user.name} - https://vk.com/id{user.vk_id}\n"
             except:
                 continue
         for i in admins:
             send_message(i, message, keyboard=main_menu_admin())
+        BlackList.objects.all().delete()
     else:
         for i in admins:
             send_message(i, "Сегодня все отправили сообщения!", keyboard=main_menu_admin())
