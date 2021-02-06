@@ -1,10 +1,14 @@
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
+import django
+django.setup()
 from apscheduler.schedulers.blocking import BlockingScheduler
 from db.api import send_checked_message_admin
 
 sched = BlockingScheduler(timezone='Asia/Yekaterinburg')
 
 
-@sched.scheduled_job('cron', hour=0, minute=35)
+@sched.scheduled_job('cron', hour=0, minute=43)
 def timed_job():
     send_checked_message_admin()
 
