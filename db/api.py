@@ -1,5 +1,6 @@
 import vk_api
 import datetime
+import xlsxwriter
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.utils import get_random_id
 from db.settings import TOKEN
@@ -58,7 +59,7 @@ def get_group(user_id, group):
     items = ("главное меню|b",)
     keyboard = generate_keyboard(items)
     message = "Введите данные, которые вы хотите отправить. \n"
-    message += "Например, !10 отсутствуют, 5 болеют, 5 по своим причинам.\n"
+    message += "Например, !0-1-3-0-0-0.\n"
     message += "Восклицательный знак '!' перед вашим сообщение ОБЯЗАТЕЛЬНО.\n"
     send_message(user_id, message, keyboard=keyboard)
 
@@ -74,6 +75,7 @@ def send_info(user_id, message):
     now_day = datetime.date.today().day
     user.send_date = str(now_day)
     user.send_message = message_send
+    user.send_info = info
     user.save()
 
     for admin in admins:
@@ -184,6 +186,47 @@ def send_checked_message_admin():
     else:
         for i in admins:
             send_message(i, "Сегодня все отправили сообщения!", keyboard=main_menu_admin())
+
+
+def add_excel():
+    users = [user for user in Users.objects.all()]
+    now_day = datetime.date.today()
+    orz = 0
+    covid = 0
+    pnevmonia = 0
+    yv_prich = 0
+    ne_yv_prich = 0
+    po_prikazy = 0
+    for user in users:
+        if user.send_date == now_day:
+            user_send_info = user.send_info
+            orz += int(user_send_info.split('-')[0])
+            covid += int(user_send_info.split('-')[1])
+            pnevmonia += int(user_send_info.split('-')[2])
+            yv_prich += int(user_send_info.split('-')[3])
+            ne_yv_prich += int(user_send_info.split('-')[4])
+            po_prikazy += int(user_send_info.split('-')[5])
+
+    workbook = xlsxwriter.Workbook(f'{now_day}.xlsx')
+    worksheet = workbook.add_worksheet()
+
+    worksheet.write('B1', f'{now_day}')
+
+    worksheet.write('A2', 'ОРЗ')
+    worksheet.write('A3', 'Ковид')
+    worksheet.write('A4', 'Пневмония')
+    worksheet.write('A5', 'По не ув. пр.')
+    worksheet.write('A6', 'По ув. пр.')
+    worksheet.write('A7', 'По приказу')
+
+    worksheet.write('B2', f'{orz}')
+    worksheet.write('B3', f'{covid}')
+    worksheet.write('B4', f'{pnevmonia}')
+    worksheet.write('B5', f'{yv_prich}')
+    worksheet.write('B6', f'{ne_yv_prich}')
+    worksheet.write('B7', f'{po_prikazy}')
+
+    workbook.close()
 
 
 def admin(user_id):

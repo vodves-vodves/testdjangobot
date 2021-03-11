@@ -23,6 +23,7 @@ class Users(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="группа", null=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="специальность", null=True)
     send_message = models.TextField(verbose_name='Отправленное сообщение', null=True)
+    send_info = models.CharField(verbose_name='Информация заболевших', null=True, max_length=255)
     send_date = models.CharField(verbose_name='Дата отправки', null=True, max_length=255)
 
     def __str__(self):

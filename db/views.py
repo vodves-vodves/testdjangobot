@@ -23,7 +23,7 @@ def main(request):
             elif user_id in admins:
                 select_method(data, user_id)
             else:
-                send_message(user_id, "Вы не зареганы")
+                send_message(user_id, "Вы не зарегистрированы")
             return HttpResponse("ok")
         else:
             return HttpResponse("ok")
